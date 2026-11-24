@@ -36,7 +36,7 @@ export default function IngredientsSection() {
   return (
     <section
       id="ingredients"
-      className="relative overflow-hidden bg-cream-2 py-24 text-ink md:py-36"
+      className="relative overflow-hidden bg-cream-2 py-16 sm:py-24 md:py-36 text-ink"
     >
       {/* Soft atmospheric background blur orbs */}
       <div className="pointer-events-none absolute -left-20 top-1/4 h-[350px] w-[350px] rounded-full bg-berry/15 blur-[120px]" />
@@ -44,41 +44,41 @@ export default function IngredientsSection() {
 
       <div className="shell relative">
         <motion.div {...stagger(0)} className="mx-auto max-w-2xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-berry/20 bg-berry/10 px-3.5 py-1 text-[0.72rem] font-bold uppercase tracking-[0.16em] text-berry-deep">
+          <div className="inline-flex items-center gap-2 rounded-full border border-berry/20 bg-berry/10 px-3.5 py-1 text-[0.70rem] sm:text-[0.72rem] font-bold uppercase tracking-[0.16em] text-berry-deep">
             <span>●</span> Pure Transparency
           </div>
-          <h2 className="display mt-5 text-[clamp(2.1rem,4.2vw,3.4rem)] text-ink">
+          <h2 className="display mt-4 sm:mt-5 text-[clamp(1.9rem,4.2vw,3.4rem)] text-ink">
             Three ingredients.
             <br />
             <span className="text-berry">That is the whole list.</span>
           </h2>
-          <p className="mt-4 text-[1.02rem] leading-relaxed text-ink/70">
+          <p className="mt-3 sm:mt-4 text-[0.95rem] sm:text-[1.02rem] leading-relaxed text-ink/70">
             No synthetic preservatives, no artificial sweeteners, no thickeners. Just pure living fruit.
           </p>
         </motion.div>
 
-        <div className="mt-14 grid gap-8 md:grid-cols-3">
+        <div className="mt-10 sm:mt-14 grid gap-6 sm:gap-8 md:grid-cols-3">
           {CARDS.map((c, i) => (
             <motion.article
               key={c.n}
               {...stagger(i + 1)}
-              className="glass group flex flex-col justify-between overflow-hidden rounded-[30px] p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_36px_75px_-35px_rgba(157,11,34,0.65)]"
+              className="glass group flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-[30px] p-6 sm:p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_36px_75px_-35px_rgba(157,11,34,0.65)]"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-berry/10 text-berry transition-all duration-500 group-hover:scale-110 group-hover:bg-berry/20">
-                    <c.Icon className="h-6 w-6" />
+                  <span className="grid h-11 w-11 sm:h-12 sm:w-12 place-items-center rounded-2xl bg-berry/10 text-berry transition-all duration-500 group-hover:scale-110 group-hover:bg-berry/20">
+                    <c.Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </span>
                   <div className="text-right">
                     <span className="font-display text-[0.75rem] font-bold tracking-[0.2em] text-berry">
                       {c.n}
                     </span>
-                    <p className="text-[0.68rem] uppercase tracking-[0.14em] text-ink/50 font-semibold">{c.proportion}</p>
+                    <p className="text-[0.66rem] sm:text-[0.68rem] uppercase tracking-[0.14em] text-ink/50 font-semibold">{c.proportion}</p>
                   </div>
                 </div>
 
                 {/* Ingredient Visual Thumbnail */}
-                <div className="mt-6 flex h-44 w-full items-center justify-center overflow-hidden rounded-2xl bg-white/40 p-3">
+                <div className="mt-5 sm:mt-6 flex h-36 sm:h-44 w-full items-center justify-center overflow-hidden rounded-2xl bg-white/40 p-3">
                   <img
                     src={c.image}
                     alt={c.title}
@@ -86,18 +86,18 @@ export default function IngredientsSection() {
                   />
                 </div>
 
-                <h3 className="mt-6 font-display text-[1.35rem] font-bold leading-tight text-ink">
+                <h3 className="mt-5 sm:mt-6 font-display text-[1.25rem] sm:text-[1.35rem] font-bold leading-tight text-ink">
                   {c.title}
                 </h3>
-                <p className="mt-3 text-[0.94rem] leading-relaxed text-ink/70">{c.text}</p>
+                <p className="mt-2.5 sm:mt-3 text-[0.90rem] sm:text-[0.94rem] leading-relaxed text-ink/70">{c.text}</p>
               </div>
 
               {/* Tag Pills */}
-              <div className="mt-6 flex flex-wrap gap-2 border-t border-ink/10 pt-5">
+              <div className="mt-5 sm:mt-6 flex flex-wrap gap-1.5 sm:gap-2 border-t border-ink/10 pt-4 sm:pt-5">
                 {c.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-berry/10 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-berry-deep"
+                    className="rounded-full bg-berry/10 px-2.5 sm:px-3 py-0.5 sm:py-1 text-[0.64rem] sm:text-[0.68rem] font-semibold uppercase tracking-[0.10em] sm:tracking-[0.12em] text-berry-deep"
                   >
                     {tag}
                   </span>

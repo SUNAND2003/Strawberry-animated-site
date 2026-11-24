@@ -78,34 +78,34 @@ export default function Experience() {
         {/* ---------- Hero Copy ---------- */}
         <div className="hero-copy js-hero shell z-10">
           <div className="max-w-xl lg:max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blush/30 bg-berry/15 px-3.5 py-1.5 backdrop-blur-md">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blush/30 bg-berry/15 px-3 sm:px-3.5 py-1 sm:py-1.5 backdrop-blur-md max-w-full">
               <span className="h-2 w-2 rounded-full bg-berry animate-pulse shrink-0" />
-              <p className="eyebrow !text-cream !tracking-[0.22em] whitespace-nowrap text-[0.70rem] sm:text-[0.74rem]">
+              <p className="eyebrow !text-cream tracking-[0.14em] sm:!tracking-[0.22em] text-[0.64rem] sm:text-[0.74rem] truncate">
                 100% Raw Cold-Pressed · Hand-Picked at Sunrise
               </p>
             </div>
 
-            <h1 className="display hero-title mt-4 text-cream">
+            <h1 className="display hero-title mt-3 sm:mt-4 text-cream">
               Freshness in
               <br />
               <span className="outline-type">every drop.</span>
             </h1>
 
-            <p className="mt-4 max-w-[46ch] text-[0.98rem] leading-relaxed text-cream/75">
+            <p className="mt-3 sm:mt-4 max-w-[46ch] text-[0.92rem] sm:text-[0.98rem] leading-relaxed text-cream/75">
               Picked at 5:40 AM and cold-pressed within four hours. One single ingredient, zero added sugar,
               zero concentrate — scroll down to watch the craft.
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-4">
-              <a href="#product" onClick={(e) => go(e, 'product')} className="btn btn-solid">
+            <div className="mt-6 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+              <a href="#product" onClick={(e) => go(e, 'product')} className="btn btn-solid w-full sm:w-auto text-center justify-center">
                 Discover the taste
               </a>
-              <a href="#about" onClick={(e) => go(e, 'about')} className="btn btn-ghost">
+              <a href="#about" onClick={(e) => go(e, 'about')} className="btn btn-ghost w-full sm:w-auto text-center justify-center">
                 Our Craft Story
               </a>
             </div>
 
-            <div className="mt-7 flex flex-wrap items-center gap-5 sm:gap-6 border-t border-white/10 pt-5 text-[0.74rem] uppercase tracking-[0.16em] text-cream/65">
+            <div className="mt-6 sm:mt-7 flex flex-wrap items-center gap-x-4 gap-y-2 sm:gap-6 border-t border-white/10 pt-4 sm:pt-5 text-[0.70rem] sm:text-[0.74rem] uppercase tracking-[0.14em] sm:tracking-[0.16em] text-cream/65">
               <div className="flex items-center gap-1.5 whitespace-nowrap">
                 <span className="text-berry font-bold">✓</span> 4h Field to Bottle
               </div>
@@ -128,21 +128,21 @@ export default function Experience() {
         <div className="final-wrap">
           <div className="js-final cap-box !max-w-xl">
             <span className="cap-badge !text-berry !border-berry/50">Ready to drink</span>
-            <h2 className="display mt-1 text-[clamp(1.4rem,3.2vw,2.2rem)] text-cream">
+            <h2 className="display mt-1 text-[clamp(1.35rem,3.2vw,2.2rem)] text-cream">
               Berry Fresh <span className="text-berry">· 100% Strawberry</span>
             </h2>
             <p className="cap-sub">
               Nature’s purest cold-pressed refreshment. Bottled raw at peak vibrancy with zero compromises.
             </p>
-            <div className="mt-4 flex justify-center gap-4 pointer-events-auto">
-              <a href="#product" onClick={(e) => go(e, 'product')} className="btn btn-solid !py-2.5 !px-6">
+            <div className="mt-4 flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-4 pointer-events-auto">
+              <a href="#product" onClick={(e) => go(e, 'product')} className="btn btn-solid w-full sm:w-auto !py-2.5 !px-6 text-center justify-center">
                 Taste the freshness
               </a>
-              <a href="#about" onClick={(e) => go(e, 'about')} className="btn btn-ghost !py-2.5 !px-6">
+              <a href="#about" onClick={(e) => go(e, 'about')} className="btn btn-ghost w-full sm:w-auto !py-2.5 !px-6 text-center justify-center">
                 How it's made
               </a>
             </div>
-            <p className="mt-3 text-[0.72rem] uppercase tracking-[0.2em] text-cream/45">
+            <p className="mt-3 text-[0.68rem] sm:text-[0.72rem] uppercase tracking-[0.16em] sm:tracking-[0.2em] text-cream/45">
               750 ml · 100% cold-pressed strawberries · served cold
             </p>
           </div>

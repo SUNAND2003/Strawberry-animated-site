@@ -86,7 +86,7 @@ export default function Footer() {
               Subscribe for harvest release dates and seasonal limited crush batches.
             </p>
 
-            <form onSubmit={handleSub} className="flex gap-2 pt-1">
+            <form onSubmit={handleSub} className="flex flex-col sm:flex-row gap-2.5 pt-1">
               <input
                 type="email"
                 required
@@ -95,7 +95,7 @@ export default function Footer() {
                 placeholder="Enter your email"
                 className="w-full rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-[0.85rem] text-cream placeholder-cream/40 focus:border-berry focus:outline-none backdrop-blur-md"
               />
-              <button type="submit" className="btn btn-solid !px-5 !py-2.5 !text-[0.7rem] shrink-0">
+              <button type="submit" className="btn btn-solid w-full sm:w-auto !px-6 !py-2.5 !text-[0.72rem] shrink-0 text-center justify-center">
                 Join
               </button>
             </form>

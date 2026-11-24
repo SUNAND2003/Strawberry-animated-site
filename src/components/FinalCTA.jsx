@@ -58,10 +58,10 @@ export default function FinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col items-center gap-3.5"
+          className="flex flex-col items-center gap-3.5 w-full max-w-md mx-auto"
         >
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <button onClick={() => scrollToId('product')} className="btn btn-solid">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+            <button onClick={() => scrollToId('product')} className="btn btn-solid w-full sm:w-auto text-center justify-center">
               Order Fresh Crate
             </button>
             <a
@@ -70,13 +70,13 @@ export default function FinalCTA() {
                 e.preventDefault()
                 scrollToId('about')
               }}
-              className="btn btn-ghost"
+              className="btn btn-ghost w-full sm:w-auto text-center justify-center"
             >
               Our Heritage
             </a>
           </div>
 
-          <p className="text-[0.74rem] uppercase tracking-[0.16em] text-cream/60 font-semibold">
+          <p className="text-[0.70rem] sm:text-[0.74rem] uppercase tracking-[0.12em] sm:tracking-[0.16em] text-cream/60 font-semibold px-2">
             750 ml · Best served cold at 4°C · Temperature-controlled delivery
           </p>
         </motion.div>

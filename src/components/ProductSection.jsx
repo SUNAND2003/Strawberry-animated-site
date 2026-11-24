@@ -48,15 +48,15 @@ export default function ProductSection() {
   }
 
   return (
-    <section id="product" className="relative overflow-hidden bg-ink py-24 md:py-36">
+    <section id="product" className="relative overflow-hidden bg-ink py-16 sm:py-24 md:py-36">
       {/* Background ambient lighting */}
       <div className="pointer-events-none absolute -left-52 top-1/4 h-[480px] w-[480px] rounded-full bg-berry/25 blur-[140px]" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-[420px] w-[420px] rounded-full bg-blush/15 blur-[130px]" />
 
-      <div className="shell relative grid items-center gap-14 md:grid-cols-2 md:gap-12">
+      <div className="shell relative grid items-center gap-10 sm:gap-14 md:grid-cols-2 md:gap-12">
         {/* Left Column: Interactive Product Showcase */}
         <motion.div {...rise} className="relative flex flex-col items-center">
-          <div className="relative flex h-[420px] w-full max-w-[480px] items-center justify-center sm:h-[500px] md:h-[580px]">
+          <div className="relative flex h-[340px] w-full max-w-[480px] items-center justify-center sm:h-[480px] md:h-[580px]">
             {/* Ambient radiant glow behind bottle */}
             <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-berry/40 via-blush/20 to-transparent blur-[70px]" />
 
@@ -68,7 +68,7 @@ export default function ProductSection() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: -20 }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="relative flex h-full w-full items-center justify-center p-6"
+                className="relative flex h-full w-full items-center justify-center p-4 sm:p-6"
               >
                 <img
                   src={current.img}
@@ -79,21 +79,21 @@ export default function ProductSection() {
             </AnimatePresence>
 
             {/* Floating feature pills */}
-            <div className="pointer-events-none absolute left-4 top-8 rounded-full border border-white/15 bg-ink/70 px-4 py-1.5 text-[0.72rem] uppercase tracking-[0.2em] text-cream/80 backdrop-blur-md shadow-lg">
+            <div className="pointer-events-none absolute left-2 sm:left-4 top-4 sm:top-8 rounded-full border border-white/15 bg-ink/75 px-3 sm:px-4 py-1 sm:py-1.5 text-[0.65rem] sm:text-[0.72rem] uppercase tracking-[0.16em] sm:tracking-[0.2em] text-cream/80 backdrop-blur-md shadow-lg">
               100% Raw Juice
             </div>
-            <div className="pointer-events-none absolute bottom-8 right-4 rounded-full border border-white/15 bg-ink/70 px-4 py-1.5 text-[0.72rem] uppercase tracking-[0.2em] text-berry backdrop-blur-md shadow-lg">
+            <div className="pointer-events-none absolute bottom-4 sm:bottom-8 right-2 sm:right-4 rounded-full border border-white/15 bg-ink/75 px-3 sm:px-4 py-1 sm:py-1.5 text-[0.65rem] sm:text-[0.72rem] uppercase tracking-[0.16em] sm:tracking-[0.2em] text-berry backdrop-blur-md shadow-lg">
               Keep Chilled at 4°C
             </div>
           </div>
 
           {/* Product Variant Selector Tabs */}
-          <div className="mt-4 flex w-full max-w-md justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-1.5 backdrop-blur-md">
+          <div className="mt-4 grid grid-cols-3 w-full max-w-md gap-1.5 sm:gap-2 rounded-2xl border border-white/10 bg-white/5 p-1 sm:p-1.5 backdrop-blur-md">
             {Object.entries(PRODUCTS).map(([key, val]) => (
               <button
                 key={key}
                 onClick={() => setSelected(key)}
-                className={`flex-1 rounded-xl py-2.5 text-[0.75rem] font-bold uppercase tracking-[0.14em] transition-all duration-300 ${
+                className={`w-full rounded-xl py-2 sm:py-2.5 text-[0.70rem] sm:text-[0.75rem] font-bold uppercase tracking-[0.12em] sm:tracking-[0.14em] transition-all duration-300 text-center ${
                   selected === key
                     ? 'bg-berry text-white shadow-lg shadow-berry/30'
                     : 'text-cream/60 hover:text-cream hover:bg-white/5'
@@ -169,16 +169,18 @@ export default function ProductSection() {
           </dl>
 
           {/* Pricing & Order Section */}
-          <div className="mt-10 flex flex-wrap items-center gap-6">
+          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5 sm:gap-6">
             <div>
-              <p className="text-[0.7rem] uppercase tracking-[0.2em] text-cream/50">Current Selection</p>
-              <div className="flex items-baseline gap-2">
-                <span className="font-display text-3xl font-extrabold text-cream">{current.price}</span>
-                <span className="text-sm text-cream/60">/ {current.size}</span>
+              <p className="text-[0.68rem] sm:text-[0.7rem] uppercase tracking-[0.2em] text-cream/50 font-semibold">
+                Current Selection
+              </p>
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <span className="font-display text-2xl sm:text-3xl font-extrabold text-cream">{current.price}</span>
+                <span className="text-xs sm:text-sm text-cream/60">/ {current.size}</span>
               </div>
             </div>
 
-            <button onClick={handleOrder} className="btn btn-solid flex-1 sm:flex-initial">
+            <button onClick={handleOrder} className="btn btn-solid w-full sm:w-auto !py-3 !px-8 text-center justify-center">
               Order Chilled Bottle
             </button>
           </div>

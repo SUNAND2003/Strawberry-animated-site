@@ -16,45 +16,54 @@ gsap.registerPlugin(ScrollTrigger)
 /** Cinematic camera dolly, steered entirely by scroll progress. */
 function Rig() {
   const camera = useThree((s) => s.camera)
+  const size = useThree((s) => s.size)
   const look = useMemo(() => new THREE.Vector3(), [])
 
   useFrame(({ clock }) => {
     const p = scroll.progress
     const t = clock.elapsedTime
 
-    const z = track(p, [
-      [0, 7.2],
-      [0.1, 6.6],
-      [0.24, 5.8],
-      [0.44, 6.9],
-      [0.56, 7.9],
-      [0.7, 8.5],
-      [0.86, 7.8],
-      [1, 7.2],
-    ])
-    const y = track(p, [
-      [0, 0.22],
-      [0.24, 0.12],
-      [0.44, 0.2],
-      [0.62, 0.38],
-      [0.85, 0.22],
-      [1, 0.38],
-    ])
-    const x = track(p, [
-      [0, 0],
-      [0.24, 0],
-      [0.4, 0.9],
-      [0.54, -0.8],
-      [0.7, 0],
-      [1, 0],
-    ])
-    const ly = track(p, [
-      [0, 0.05],
-      [0.24, 0.05],
-      [0.62, 0.12],
-      [0.85, 0.05],
-      [1, 0.42],
-    ])
+    const isNarrow = size.width < 640
+    const zMul = isNarrow ? 1.24 : (size.width < 960 ? 1.1 : 1.0)
+    const yOffset = isNarrow ? 0.2 : 0
+
+    const z =
+      track(p, [
+        [0, 7.2],
+        [0.1, 6.6],
+        [0.24, 5.8],
+        [0.44, 6.9],
+        [0.56, 7.9],
+        [0.7, 8.5],
+        [0.86, 7.8],
+        [1, 7.2],
+      ]) * zMul
+    const y =
+      track(p, [
+        [0, 0.22],
+        [0.24, 0.12],
+        [0.44, 0.2],
+        [0.62, 0.38],
+        [0.85, 0.22],
+        [1, 0.38],
+      ]) + yOffset
+    const x =
+      track(p, [
+        [0, 0],
+        [0.24, 0],
+        [0.4, 0.9],
+        [0.54, -0.8],
+        [0.7, 0],
+        [1, 0],
+      ]) * (isNarrow ? 0.45 : 1.0)
+    const ly =
+      track(p, [
+        [0, 0.05],
+        [0.24, 0.05],
+        [0.62, 0.12],
+        [0.85, 0.05],
+        [1, 0.42],
+      ]) + yOffset
 
     const idle = seg(p, 0.02, 0.18)
     camera.position.set(
