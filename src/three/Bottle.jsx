@@ -7,56 +7,79 @@ import { labelTexture } from './textures'
 import { isMobile } from './hooks'
 
 const SEGMENTS = 56
-export const LIQUID_TOP = 1.34
-const CAP_SEALED_Y = 1.90
-const CAP_OPEN_Y = 4.25
-const BUBBLES = 32
-const SPLASH_COUNT = 16
+export const LIQUID_TOP = 1.95
+const CAP_SEALED_Y = 2.40
+const CAP_OPEN_Y = 4.60
+const BUBBLES = 36
+const SPLASH_COUNT = 18
 
-/** Lathe profile of the juice bottle, from base (y=0) to lip (y≈1.915). */
+/** Lathe profile of the artisan luxury juice bottle, from base (y=0) to crown lip (y≈2.41). */
 export function bottleProfile() {
   const p = []
   const add = (x, y) => p.push(new THREE.Vector2(x, y))
 
+  // 1. Heavy indented base punt (solid glass bottom)
   add(0.001, 0.0)
-  add(0.2, 0.004)
-  add(0.34, 0.016)
-  add(0.405, 0.048)
-  add(0.42, 0.09)
-  for (let y = 0.16; y < 1.14; y += 0.07) add(0.42, y)
-  add(0.42, 1.15)
+  add(0.08, 0.02)
+  add(0.20, 0.01)
+  add(0.33, 0.004)
+  add(0.365, 0.016)
+  add(0.38, 0.045)
 
-  // shoulder
-  for (let i = 1; i <= 14; i++) {
-    const k = i / 14
-    const y = 1.15 + k * 0.37
-    const r = 0.17 + (0.42 - 0.17) * Math.pow(Math.cos((k * Math.PI) / 2), 1.4)
+  // 2. Tall cylindrical body
+  add(0.38, 0.12)
+  add(0.38, 0.40)
+  add(0.38, 0.80)
+  add(0.38, 1.15)
+  add(0.38, 1.22)
+
+  // 3. Graceful sloping artisan shoulder (conical-swept curve)
+  for (let i = 1; i <= 16; i++) {
+    const k = i / 16
+    const y = 1.22 + k * 0.46
+    const ease = 0.5 - 0.5 * Math.cos(k * Math.PI)
+    const r = 0.38 - (0.38 - 0.125) * ease
     add(r, y)
   }
 
-  // neck + lip
-  add(0.17, 1.58)
-  add(0.17, 1.8)
-  add(0.198, 1.845)
-  add(0.198, 1.9)
-  add(0.17, 1.915)
-  add(0.001, 1.915)
+  // 4. Slender elegant neck
+  add(0.125, 1.75)
+  add(0.125, 1.92)
+  add(0.125, 2.12)
+  add(0.128, 2.22)
+
+  // 5. Crown finish collar & lip
+  add(0.145, 2.26)
+  add(0.150, 2.30)
+  add(0.138, 2.33)
+  add(0.155, 2.36)
+  add(0.155, 2.40)
+  add(0.130, 2.41)
+  add(0.001, 2.41)
   return p
 }
 
 export function getLiquidRadius(y) {
-  if (y <= 0.05) return Math.max(0.01, 0.398 * Math.sqrt(Math.max(0, y / 0.05)))
-  if (y <= 1.15) return 0.398
-  const k = Math.min(1, Math.max(0, (y - 1.15) / 0.37))
-  return Math.max(0.12, 0.17 + (0.42 - 0.17) * Math.pow(Math.cos((k * Math.PI) / 2), 1.4) - 0.022)
+  if (y <= 0.08) return 0.001
+  if (y <= 0.14) {
+    const k = (y - 0.08) / 0.06
+    return Math.max(0.01, 0.355 * Math.sqrt(k))
+  }
+  if (y <= 1.22) return 0.355
+  if (y <= 1.68) {
+    const k = (y - 1.22) / 0.46
+    const ease = 0.5 - 0.5 * Math.cos(k * Math.PI)
+    return Math.max(0.105, 0.355 - (0.355 - 0.105) * ease)
+  }
+  return 0.105
 }
 
 function liquidProfile() {
   const pts = []
-  pts.push(new THREE.Vector2(0.001, 0))
-  const N = 48
+  pts.push(new THREE.Vector2(0.001, 0.08))
+  const N = 56
   for (let i = 0; i <= N; i++) {
-    const y = (i / N) * LIQUID_TOP
+    const y = 0.08 + (i / N) * (LIQUID_TOP - 0.08)
     pts.push(new THREE.Vector2(getLiquidRadius(y), y))
   }
   pts.push(new THREE.Vector2(0.001, LIQUID_TOP))
@@ -86,25 +109,46 @@ export function Bottle({
   const liquidPts = useMemo(liquidProfile, [])
   const liquidGeo = useMemo(() => new THREE.LatheGeometry(liquidPts, SEGMENTS), [liquidPts])
   const discGeo = useMemo(() => new THREE.CircleGeometry(1, 48), [])
-  const frothGeo = useMemo(() => new THREE.RingGeometry(0.03, 0.18, 36), [])
+  const frothGeo = useMemo(() => new THREE.RingGeometry(0.02, 0.14, 36), [])
   const bubGeo = useMemo(() => new THREE.SphereGeometry(1, 10, 8), [])
   const splashGeo = useMemo(() => new THREE.SphereGeometry(1, 10, 8), [])
-  const streamGeo = useMemo(() => new THREE.CylinderGeometry(0.045, 0.075, 1, 24, 16), [])
+  const streamGeo = useMemo(() => new THREE.CylinderGeometry(0.038, 0.055, 1, 24, 16), [])
 
+  // Fluted crimped crown cap geometry with 21 flutes
+  const crownGeo = useMemo(() => {
+    const geo = new THREE.CylinderGeometry(0.158, 0.168, 0.072, 42, 1, false)
+    const pos = geo.attributes.position
+    for (let i = 0; i < pos.count; i++) {
+      const y = pos.getY(i)
+      if (y < 0) {
+        const x = pos.getX(i)
+        const z = pos.getZ(i)
+        const angle = Math.atan2(z, x)
+        const crimp = 1 + 0.042 * Math.sin(angle * 21)
+        pos.setX(i, x * crimp)
+        pos.setZ(i, z * crimp)
+      }
+    }
+    pos.needsUpdate = true
+    geo.computeVertexNormals()
+    return geo
+  }, [])
+
+  // Premium flint glass material with authentic refractive index and clarity
   const glassMat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
         color: '#ffffff',
-        roughness: 0.05,
+        roughness: 0.02,
         metalness: 0,
-        transmission: 0.98,
-        thickness: 0.38,
-        ior: 1.48,
-        clearcoat: 0.6,
-        clearcoatRoughness: 0.1,
-        envMapIntensity: 1.05,
+        transmission: 0.99,
+        thickness: 0.45,
+        ior: 1.52,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.04,
+        envMapIntensity: 1.4,
         side: THREE.FrontSide,
-        specularIntensity: 1,
+        specularIntensity: 1.0,
       }),
     []
   )
@@ -113,12 +157,15 @@ export function Bottle({
   const liquidMat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: '#ce0b2b',
-        roughness: 0.12,
-        clearcoat: 0.65,
-        clearcoatRoughness: 0.15,
-        emissive: new THREE.Color('#7a0218'),
-        emissiveIntensity: 0.46,
+        color: '#e50930',
+        roughness: 0.14,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.10,
+        transmission: 0.35,
+        thickness: 0.65,
+        ior: 1.34,
+        emissive: new THREE.Color('#850218'),
+        emissiveIntensity: 0.40,
         side: THREE.DoubleSide,
         clippingPlanes: [clipPlane],
         clipShadows: true,
@@ -130,10 +177,10 @@ export function Bottle({
   const discMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#e21034',
-        roughness: 0.22,
-        emissive: new THREE.Color('#8a021b'),
-        emissiveIntensity: 0.48,
+        color: '#eb1236',
+        roughness: 0.18,
+        emissive: new THREE.Color('#94041e'),
+        emissiveIntensity: 0.46,
         side: THREE.DoubleSide,
       }),
     []
@@ -144,17 +191,17 @@ export function Bottle({
     () =>
       new THREE.MeshStandardMaterial({
         color: '#ff8ca4',
-        roughness: 0.32,
+        roughness: 0.28,
         emissive: new THREE.Color('#ff3b65'),
         emissiveIntensity: 0.45,
         transparent: true,
-        opacity: 0.85,
+        opacity: 0.88,
         side: THREE.DoubleSide,
       }),
     []
   )
 
-  // Dynamic pouring stream of cold-pressed strawberry juice (Opaque pass so glass refracts it)
+  // Dynamic pouring stream of cold-pressed strawberry juice
   const streamMat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
@@ -162,8 +209,8 @@ export function Bottle({
         emissive: new THREE.Color('#9e001f'),
         emissiveIntensity: 0.65,
         roughness: 0.12,
-        clearcoat: 0.9,
-        clearcoatRoughness: 0.12,
+        clearcoat: 0.95,
+        clearcoatRoughness: 0.08,
         side: THREE.DoubleSide,
       }),
     []
@@ -173,29 +220,35 @@ export function Bottle({
     () =>
       new THREE.MeshStandardMaterial({
         color: '#ffe5eb',
-        roughness: 0.2,
+        roughness: 0.18,
         emissive: new THREE.Color('#ff8fa6'),
-        emissiveIntensity: 0.4,
+        emissiveIntensity: 0.45,
       }),
     []
   )
 
-  // Sleek brushed chrome / silver metal cap
+  // Crown cap red lacquer top
   const capMat = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
-        color: '#f0f0f4',
+      new THREE.MeshPhysicalMaterial({
+        color: '#d60e2f',
+        emissive: new THREE.Color('#780315'),
+        emissiveIntensity: 0.28,
         roughness: 0.18,
-        metalness: 0.92,
+        metalness: 0.1,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.06,
       }),
     []
   )
+
+  // Metallic silver edge for crimp teeth
   const capBandMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#d00c28',
-        roughness: 0.28,
-        metalness: 0.55,
+        color: '#f0f0f5',
+        roughness: 0.18,
+        metalness: 0.95,
       }),
     []
   )
@@ -205,7 +258,8 @@ export function Bottle({
       new THREE.MeshStandardMaterial({
         map: labelTexture(),
         transparent: true,
-        roughness: 0.3,
+        roughness: 0.35,
+        metalness: 0.02,
         side: THREE.DoubleSide,
       }),
     []
@@ -360,7 +414,7 @@ export function Bottle({
       const showStream = pourIntensity > 0.01 && f < 0.99
       stream.visible = showStream
       if (showStream) {
-        const yTop = 1.910
+        const yTop = 2.40
         const yBottom = fillY
         const streamH = Math.max(0.01, yTop - yBottom)
         const streamMidY = (yTop + yBottom) / 2
@@ -368,9 +422,9 @@ export function Bottle({
         // Pulsing fluid flow
         const streamRadius = pourIntensity * (0.95 + Math.sin(time * 18) * 0.08)
         stream.position.set(
-          Math.sin(time * 12) * 0.006,
+          Math.sin(time * 12) * 0.005,
           streamMidY,
-          Math.cos(time * 11) * 0.006
+          Math.cos(time * 11) * 0.005
         )
         stream.scale.set(streamRadius, streamH, streamRadius)
       }
@@ -412,8 +466,8 @@ export function Bottle({
           const b = bubbleData[i]
           const speedMultiplier = 1 + pourIntensity * 1.5
           const k = (b.ph + time * b.sp * speedMultiplier) % 1
-          const y = 0.06 + k * Math.max(0.04, fillY - 0.08)
-          const squeeze = y > 1.15 ? 0.55 : 1
+          const y = 0.09 + k * Math.max(0.04, fillY - 0.10)
+          const squeeze = y > 1.62 ? 0.32 : y > 1.22 ? 0.65 : 1
           const turb = Math.sin(time * 6 + i) * 0.015 * pourIntensity
 
           dummy.position.set(
@@ -446,7 +500,7 @@ export function Bottle({
 
   return (
     <group ref={root}>
-      <group position={[0, -0.975, 0]}>
+      <group position={[0, -1.20, 0]}>
         {/* Outer glass bottle */}
         <mesh geometry={glassGeo} material={glassMat} />
 
@@ -469,20 +523,15 @@ export function Bottle({
         <instancedMesh ref={bubbleRef} args={[bubGeo, bubMat, BUBBLES]} visible={false} frustumCulled={false} />
 
         {/* Curved luxury front label */}
-        <mesh position={[0, 0.65, 0]} material={labelMat}>
-          <cylinderGeometry args={[0.422, 0.422, 0.68, 56, 1, true, -Math.PI * 0.42, Math.PI * 0.84]} />
+        <mesh position={[0, 0.68, 0]} material={labelMat}>
+          <cylinderGeometry args={[0.382, 0.382, 0.72, 56, 1, true, -Math.PI * 0.40, Math.PI * 0.80]} />
         </mesh>
 
-        {/* Brushed chrome cap & ruby seal band */}
+        {/* Fluted crown cap with crimson enamel and metallic crimp rim */}
         <group ref={capRef} position={[0, CAP_OPEN_Y, 0]}>
-          <mesh material={capMat} castShadow>
-            <cylinderGeometry args={[0.207, 0.207, 0.2, 44]} />
-          </mesh>
-          <mesh position={[0, -0.078, 0]} material={capBandMat}>
-            <cylinderGeometry args={[0.214, 0.214, 0.05, 44]} />
-          </mesh>
-          <mesh position={[0, 0.104, 0]} material={capBandMat}>
-            <cylinderGeometry args={[0.15, 0.15, 0.02, 32]} />
+          <mesh geometry={crownGeo} material={capMat} castShadow />
+          <mesh position={[0, -0.036, 0]} material={capBandMat}>
+            <ringGeometry args={[0.138, 0.170, 42]} />
           </mesh>
         </group>
       </group>

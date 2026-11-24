@@ -5,7 +5,7 @@ import { scroll } from '../state'
 import { seg, smooth, clamp01, easeOutCubic, easeInOutCubic } from './utils'
 
 const ORIGIN = new THREE.Vector3(0, 0.1, 0)
-const MOUTH = new THREE.Vector3(0, 0.93, 0)
+const MOUTH = new THREE.Vector3(0, 1.15, 0)
 
 /**
  * One continuous, scroll-synced juice splash: the droplets burst out of the
